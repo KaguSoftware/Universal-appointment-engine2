@@ -15,6 +15,8 @@ export interface DispatchInput {
   startAt: Date;
   email?: string | null;
   phone?: string | null;
+  /** Account-less management link, included in emails when present. */
+  manageUrl?: string | null;
   type: NotificationType;
 }
 
@@ -41,6 +43,8 @@ export class NotificationDispatcher {
         serviceName: input.serviceName,
         startAt: input.startAt,
         to,
+        // Only surface the manage link over email (channel.kind === 'email').
+        manageUrl: channel.kind === "email" ? (input.manageUrl ?? null) : null,
       });
       const result = await channel.send(message);
       await this.log(input, channel.kind, result.ok ? "sent" : "failed");

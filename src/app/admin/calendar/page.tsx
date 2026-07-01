@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { setAppointmentStatus } from "@/app/admin/calendar/actions";
+import { WalkInForm } from "@/components/admin/walk-in-form";
 import { WeekGrid } from "@/components/admin/week-grid";
 import { AppointmentRepository } from "@/lib/repositories/appointment-repository";
+import { StaffRepository } from "@/lib/repositories/staff-repository";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { TenantContext } from "@/lib/tenant/tenant-context";
 
@@ -48,6 +50,20 @@ export default async function CalendarPage({
   const base = isWeek ? rangeStart : day;
   const q = (d: string) => `?date=${d}${isWeek ? "&view=week" : ""}`;
 
+  // Data for the walk-in booking form: services + staff with their service links.
+  const staffRepo = new StaffRepository(supabase, ctx.tenant.id);
+  const [services, staffList] = await Promise.all([
+    staffRepo.servicesForAssignment(),
+    staffRepo.list(),
+  ]);
+  const staffOptions = await Promise.all(
+    staffList.map(async (s) => ({
+      id: s.id,
+      name: s.display_name,
+      serviceIds: await staffRepo.serviceIds(s.id),
+    })),
+  );
+
   return (
     <div className="max-w-3xl space-y-6">
       <div className="flex items-center justify-between">
@@ -68,6 +84,14 @@ export default async function CalendarPage({
           </Link>
         </div>
       </div>
+
+      {services.length > 0 && staffOptions.length > 0 && (
+        <WalkInForm
+          services={services}
+          staff={staffOptions}
+          defaultDate={isWeek ? rangeStart : day}
+        />
+      )}
 
       {isWeek ? (
         <WeekGrid
@@ -90,6 +114,9 @@ export default async function CalendarPage({
               <div className="flex-1">
                 <p className="font-medium">
                   {fmt(a.start_at)} – {fmt(a.end_at)} · {a.services.name}
+                  {a.guest_name && (
+                    <span className="text-muted"> · {a.guest_name}</span>
+                  )}
                 </p>
                 <p className="text-sm text-muted">{a.staff.display_name}</p>
               </div>

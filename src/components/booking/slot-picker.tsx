@@ -12,6 +12,8 @@ interface Props {
   tenant: Tenant;
   service: Service;
   staff: Staff[];
+  /** When false, the form collects guest contact details. */
+  isLoggedIn: boolean;
 }
 
 function todayISO(): string {
@@ -20,7 +22,7 @@ function todayISO(): string {
 
 const initialState: BookState = {};
 
-export function SlotPicker({ tenant, service, staff }: Props) {
+export function SlotPicker({ tenant, service, staff, isLoggedIn }: Props) {
   const [staffId, setStaffId] = useState(staff[0]?.id ?? "");
   const [date, setDate] = useState(todayISO());
   const [slots, setSlots] = useState<string[]>([]);
@@ -117,6 +119,43 @@ export function SlotPicker({ tenant, service, staff }: Props) {
           <input type="hidden" name="serviceId" value={service.id} />
           <input type="hidden" name="staffId" value={staffId} />
           <input type="hidden" name="startISO" value={selected} />
+          {!isLoggedIn && (
+            <div className="space-y-3">
+              <label className="block space-y-1.5">
+                <span className="label-text">Your name</span>
+                <input
+                  name="guest_name"
+                  required
+                  autoComplete="name"
+                  className="field"
+                />
+              </label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="block space-y-1.5">
+                  <span className="label-text">Email</span>
+                  <input
+                    name="guest_email"
+                    type="email"
+                    autoComplete="email"
+                    className="field"
+                  />
+                </label>
+                <label className="block space-y-1.5">
+                  <span className="label-text">Phone</span>
+                  <input
+                    name="guest_phone"
+                    type="tel"
+                    autoComplete="tel"
+                    className="field"
+                  />
+                </label>
+              </div>
+              <p className="text-xs text-muted">
+                Enter an email or phone so we can send your confirmation and a
+                link to manage this booking.
+              </p>
+            </div>
+          )}
           <textarea
             name="notes"
             placeholder="Notes (optional)"

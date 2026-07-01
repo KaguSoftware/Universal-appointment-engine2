@@ -23,6 +23,9 @@ export default async function ConfirmedPage({
 
   if (!data) notFound();
 
+  const isGuest = !data.customer_id;
+  const manageHref = `/book/${slug}/manage/${data.manage_token}`;
+
   const when = new Intl.DateTimeFormat("en", {
     dateStyle: "full",
     timeStyle: "short",
@@ -42,13 +45,32 @@ export default async function ConfirmedPage({
           {data.services.name} — {when}
         </p>
       </div>
+      {isGuest && (
+        <div className="card mx-auto max-w-sm p-4 text-left text-sm">
+          <p className="label-text">Manage this booking</p>
+          <p className="mt-1 text-muted">
+            No account needed — use this link to reschedule or cancel. We&apos;ve
+            also emailed it to you.
+          </p>
+          <Link href={manageHref} className="mt-2 inline-block font-medium">
+            Open manage page →
+          </Link>
+        </div>
+      )}
+
       <div className="flex justify-center gap-3">
         <Link href={`/book/${slug}`} className="btn-ghost">
           Book another
         </Link>
-        <Link href="/my/appointments" className="btn-primary">
-          My appointments
-        </Link>
+        {isGuest ? (
+          <Link href={manageHref} className="btn-primary">
+            Manage booking
+          </Link>
+        ) : (
+          <Link href="/my/appointments" className="btn-primary">
+            My appointments
+          </Link>
+        )}
       </div>
     </section>
   );

@@ -3,6 +3,7 @@ import type {
   Appointment,
   AvailabilityOverride,
   AvailabilityRule,
+  ManagedAppointment,
   Service,
 } from "@/lib/types";
 import { BookingRepository } from "./booking-repository";
@@ -54,13 +55,20 @@ export class BookingService {
     return engine.generate();
   }
 
-  /** Create an appointment via the transactional RPC. Throws a coded error. */
+  /**
+   * Create an appointment via the transactional RPC. Works for a logged-in
+   * customer (guest fields omitted) or a guest (name + email/phone required).
+   * Throws a coded error.
+   */
   async book(params: {
     tenantId: string;
     serviceId: string;
     staffId: string;
     startISO: string;
     notes?: string;
+    guestName?: string;
+    guestEmail?: string;
+    guestPhone?: string;
   }): Promise<Appointment> {
     const { data, error } = await this.supabase
       .rpc("create_appointment", {
@@ -69,7 +77,67 @@ export class BookingService {
         p_staff: params.staffId,
         p_start: params.startISO,
         p_notes: params.notes ?? null,
+        p_guest_name: params.guestName ?? null,
+        p_guest_email: params.guestEmail ?? null,
+        p_guest_phone: params.guestPhone ?? null,
       })
+      .single<Appointment>();
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  /** Admin/staff walk-in booking on behalf of a (guest) customer. */
+  async bookAsAdmin(params: {
+    tenantId: string;
+    serviceId: string;
+    staffId: string;
+    startISO: string;
+    guestName: string;
+    guestEmail?: string;
+    guestPhone?: string;
+    notes?: string;
+  }): Promise<Appointment> {
+    const { data, error } = await this.supabase
+      .rpc("create_appointment_admin", {
+        p_tenant: params.tenantId,
+        p_service: params.serviceId,
+        p_staff: params.staffId,
+        p_start: params.startISO,
+        p_guest_name: params.guestName,
+        p_guest_email: params.guestEmail ?? null,
+        p_guest_phone: params.guestPhone ?? null,
+        p_notes: params.notes ?? null,
+      })
+      .single<Appointment>();
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  /** Look up one appointment by its management token (account-less access). */
+  async getByToken(token: string): Promise<ManagedAppointment | null> {
+    const { data, error } = await this.supabase
+      .rpc("manage_get_appointment", { p_token: token })
+      .maybeSingle<ManagedAppointment>();
+    if (error) throw new Error(error.message);
+    return data ?? null;
+  }
+
+  /** Cancel by management token. */
+  async cancelByToken(token: string): Promise<Appointment> {
+    const { data, error } = await this.supabase
+      .rpc("cancel_by_token", { p_token: token })
+      .single<Appointment>();
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  /** Reschedule by management token. */
+  async rescheduleByToken(
+    token: string,
+    startISO: string,
+  ): Promise<Appointment> {
+    const { data, error } = await this.supabase
+      .rpc("reschedule_by_token", { p_token: token, p_start: startISO })
       .single<Appointment>();
     if (error) throw new Error(error.message);
     return data;

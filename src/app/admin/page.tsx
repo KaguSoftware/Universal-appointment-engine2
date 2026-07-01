@@ -44,7 +44,12 @@ export default async function AdminDashboard() {
                 style={{ backgroundColor: a.staff.color }}
               />
               <div className="flex-1">
-                <p className="font-medium">{a.services.name}</p>
+                <p className="font-medium">
+                  {a.services.name}
+                  {a.guest_name && (
+                    <span className="text-muted"> · {a.guest_name}</span>
+                  )}
+                </p>
                 <p className="text-sm text-muted">
                   {new Intl.DateTimeFormat("en", {
                     hour: "2-digit",

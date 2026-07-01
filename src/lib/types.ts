@@ -112,11 +112,35 @@ export interface Appointment {
   tenant_id: string;
   service_id: string;
   staff_id: string;
-  customer_id: string;
+  /** Null for guest bookings (customer has no account). */
+  customer_id: string | null;
+  guest_name: string | null;
+  guest_email: string | null;
+  guest_phone: string | null;
+  /** Unguessable token for account-less self-service management links. */
+  manage_token: string;
+  /** True when a tenant member created it (walk-in / phone booking). */
+  created_by_staff: boolean;
   start_at: string; // ISO UTC
   end_at: string; // ISO UTC
   status: AppointmentStatus;
   notes: string | null;
   google_event_id: string | null;
   created_at: string;
+}
+
+/** Flattened appointment view returned by the token-management RPC. */
+export interface ManagedAppointment {
+  id: string;
+  tenant_id: string;
+  service_id: string;
+  staff_id: string;
+  start_at: string;
+  end_at: string;
+  status: AppointmentStatus;
+  service_name: string;
+  staff_name: string;
+  tenant_name: string;
+  tenant_slug: string;
+  timezone: string;
 }

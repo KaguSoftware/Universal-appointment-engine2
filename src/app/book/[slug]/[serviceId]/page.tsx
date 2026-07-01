@@ -21,6 +21,12 @@ export default async function SlotPickerPage({
   if (!service) notFound();
 
   const staff = await repo.listStaffForService(serviceId);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const price =
+    service.price > 0 ? `${service.price} ${service.currency}` : "Free";
 
   return (
     <section className="space-y-6">
@@ -28,8 +34,14 @@ export default async function SlotPickerPage({
         ← Back
       </Link>
       <div>
-        <h2 className="text-lg font-semibold">{service.name}</h2>
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="text-lg font-semibold">{service.name}</h2>
+          <span className="font-semibold">{price}</span>
+        </div>
         <p className="text-sm text-muted">{service.duration_min} min</p>
+        {service.description && (
+          <p className="mt-2 text-sm text-muted">{service.description}</p>
+        )}
       </div>
 
       {staff.length === 0 ? (
@@ -37,7 +49,12 @@ export default async function SlotPickerPage({
           No providers are available for this service yet.
         </p>
       ) : (
-        <SlotPicker tenant={tenant} service={service} staff={staff} />
+        <SlotPicker
+          tenant={tenant}
+          service={service}
+          staff={staff}
+          isLoggedIn={Boolean(user)}
+        />
       )}
     </section>
   );

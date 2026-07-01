@@ -31,9 +31,14 @@ export default async function ServicePickerPage({
               href={`/book/${slug}/${s.id}`}
               className="flex items-center justify-between rounded-md border border-border p-4 transition-colors hover:bg-subtle"
             >
-              <div>
+              <div className="min-w-0 pr-4">
                 <p className="font-medium">{s.name}</p>
-                <p className="text-sm text-muted">{s.duration_min} min</p>
+                {s.description && (
+                  <p className="mt-0.5 line-clamp-2 text-sm text-muted">
+                    {s.description}
+                  </p>
+                )}
+                <p className="mt-0.5 text-sm text-muted">{s.duration_min} min</p>
               </div>
               <span className="font-semibold">
                 {s.price > 0 ? `${s.price} ${s.currency}` : "Free"}

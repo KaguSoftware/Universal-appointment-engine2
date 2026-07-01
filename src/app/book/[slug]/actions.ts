@@ -13,7 +13,8 @@ async function syncToGoogle(appt: Appointment): Promise<void> {
 
 const ERROR_MESSAGES: Record<string, string> = {
   SLOT_TAKEN: "That time was just booked. Please pick another slot.",
-  AUTH_REQUIRED: "Please sign in to book.",
+  GUEST_DETAILS_REQUIRED:
+    "Please enter your name and an email or phone number.",
   SERVICE_NOT_FOUND: "This service is no longer available.",
   STAFF_SERVICE_MISMATCH: "This provider can't perform the selected service.",
 };
@@ -56,10 +57,15 @@ export async function bookAppointment(
 
   const slug = String(formData.get("slug"));
   const serviceId = String(formData.get("serviceId"));
-  if (!user) {
-    redirect(
-      `/auth/login?next=${encodeURIComponent(`/book/${slug}/${serviceId}`)}`,
-    );
+
+  // Guests may book without an account by providing contact details; a
+  // logged-in user's identity takes precedence over any guest fields.
+  const guestName = String(formData.get("guest_name") || "").trim();
+  const guestEmail = String(formData.get("guest_email") || "").trim();
+  const guestPhone = String(formData.get("guest_phone") || "").trim();
+
+  if (!user && !guestName) {
+    return { error: ERROR_MESSAGES.GUEST_DETAILS_REQUIRED };
   }
 
   try {
@@ -69,6 +75,9 @@ export async function bookAppointment(
       staffId: String(formData.get("staffId")),
       startISO: String(formData.get("startISO")),
       notes: String(formData.get("notes") || "") || undefined,
+      guestName: user ? undefined : guestName || undefined,
+      guestEmail: user ? undefined : guestEmail || undefined,
+      guestPhone: user ? undefined : guestPhone || undefined,
     });
     await new AppointmentNotifier().notify(appt.id, "confirmation");
     await syncToGoogle(appt);

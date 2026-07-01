@@ -7,6 +7,14 @@ export interface TemplateContext {
   serviceName: string;
   startAt: Date;
   to: string;
+  /** Account-less manage link; appended to email bodies when present. */
+  manageUrl?: string | null;
+}
+
+/** Appends a "manage your booking" line when a link is available. */
+function withManageLink(body: string, manageUrl?: string | null): string {
+  if (!manageUrl) return body;
+  return `${body}\n\nView, reschedule or cancel your booking: ${manageUrl}`;
 }
 
 function formatWhen(date: Date, timeZone: string): string {
@@ -30,7 +38,10 @@ export function buildMessage(
       return {
         to: ctx.to,
         subject: `Your ${appt} at ${ctx.tenant.name} is confirmed`,
-        body: `Your ${appt} for ${ctx.serviceName} is confirmed for ${when}.`,
+        body: withManageLink(
+          `Your ${appt} for ${ctx.serviceName} is confirmed for ${when}.`,
+          ctx.manageUrl,
+        ),
       };
     case "cancellation":
       return {
@@ -42,7 +53,10 @@ export function buildMessage(
       return {
         to: ctx.to,
         subject: `Reminder: ${appt} at ${ctx.tenant.name}`,
-        body: `Reminder — your ${appt} for ${ctx.serviceName} is on ${when}.`,
+        body: withManageLink(
+          `Reminder — your ${appt} for ${ctx.serviceName} is on ${when}.`,
+          ctx.manageUrl,
+        ),
       };
   }
 }
