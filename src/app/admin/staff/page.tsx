@@ -1,11 +1,12 @@
 import {
   createStaff,
   deleteStaff,
+  disconnectGoogle,
   setStaffServices,
   updateStaff,
 } from "@/app/admin/staff/actions";
 import { AvailabilityEditor } from "@/components/admin/availability-editor";
-import { canAddStaff } from "@/lib/feature-gate";
+import { canAddStaff, tenantAllows } from "@/lib/feature-gate";
 import { StaffRepository } from "@/lib/repositories/staff-repository";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { TenantContext } from "@/lib/tenant/tenant-context";
@@ -22,6 +23,7 @@ export default async function StaffPage() {
     repo.activeCount(),
   ]);
   const canAdd = canAddStaff(ctx.tenant.plan, activeCount);
+  const googleEnabled = tenantAllows(ctx.tenant, "google_calendar");
 
   // Resolve per-staff assignments + availability up front so the JSX is sync.
   const detailed = await Promise.all(
@@ -49,6 +51,7 @@ export default async function StaffPage() {
 
             <StaffFields staff={s} />
             <ServiceAssignment staff={s} services={services} assigned={assigned} />
+            <GoogleConnect staff={s} enabled={googleEnabled} />
             <AvailabilityEditor staffId={s.id} rules={rules} />
           </div>
         );
@@ -106,6 +109,37 @@ function StaffFields({ staff }: { staff: Staff }) {
       </label>
       <button className="rounded border px-3 py-1">Save</button>
     </form>
+  );
+}
+
+function GoogleConnect({ staff, enabled }: { staff: Staff; enabled: boolean }) {
+  if (!enabled) {
+    return (
+      <p className="text-xs text-gray-400">
+        Google Calendar sync is available on the Pro plan.
+      </p>
+    );
+  }
+  return (
+    <div className="flex items-center gap-3 text-sm">
+      <span className="font-medium">Google Calendar</span>
+      {staff.google_calendar_connected ? (
+        <>
+          <span className="text-green-700">Connected</span>
+          <form action={disconnectGoogle}>
+            <input type="hidden" name="staffId" value={staff.id} />
+            <button className="text-red-600 underline">Disconnect</button>
+          </form>
+        </>
+      ) : (
+        <a
+          href={`/api/integrations/google/connect?staff=${staff.id}`}
+          className="underline"
+        >
+          Connect
+        </a>
+      )}
+    </div>
   );
 }
 

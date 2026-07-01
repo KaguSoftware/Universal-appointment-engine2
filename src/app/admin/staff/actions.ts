@@ -51,6 +51,15 @@ export async function setStaffServices(formData: FormData): Promise<void> {
   revalidatePath("/admin/staff");
 }
 
+export async function disconnectGoogle(formData: FormData): Promise<void> {
+  await TenantContext.require();
+  const { CalendarSyncService } = await import(
+    "@/lib/integrations/google/calendar-sync-service"
+  );
+  await new CalendarSyncService().disconnect(String(formData.get("staffId")));
+  revalidatePath("/admin/staff");
+}
+
 export async function saveAvailability(formData: FormData): Promise<void> {
   const { repo } = await ctxRepo();
   const staffId = String(formData.get("staffId"));

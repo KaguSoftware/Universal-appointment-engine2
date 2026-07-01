@@ -2,8 +2,14 @@
 
 import { redirect } from "next/navigation";
 import { BookingService } from "@/lib/booking";
+import { CalendarSyncService } from "@/lib/integrations/google/calendar-sync-service";
 import { AppointmentNotifier } from "@/lib/integrations/notifications/appointment-notifier";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { Appointment } from "@/lib/types";
+
+async function syncToGoogle(appt: Appointment): Promise<void> {
+  await new CalendarSyncService().pushForAppointment(appt.id);
+}
 
 const ERROR_MESSAGES: Record<string, string> = {
   SLOT_TAKEN: "That time was just booked. Please pick another slot.",
@@ -65,6 +71,7 @@ export async function bookAppointment(
       notes: String(formData.get("notes") || "") || undefined,
     });
     await new AppointmentNotifier().notify(appt.id, "confirmation");
+    await syncToGoogle(appt);
     redirect(`/book/${slug}/confirmed?id=${appt.id}`);
   } catch (e) {
     const code = e instanceof Error ? e.message : "";
