@@ -21,8 +21,8 @@ export default async function AdminLayout({
   const terms = resolveTerminology(ctx.tenant);
 
   return (
-    <div className="flex min-h-screen gap-6 p-4">
-      <aside className="glass sticky top-4 flex h-[calc(100vh-2rem)] w-60 shrink-0 flex-col p-5">
+    <div className="flex min-h-screen">
+      <aside className="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-border bg-surface p-5">
         <div className="mb-8">
           <p className="text-lg font-semibold tracking-tight">
             {ctx.tenant.name}
@@ -34,7 +34,7 @@ export default async function AdminLayout({
             <Link
               key={item.href}
               href={item.href}
-              className="block rounded-lg px-3 py-2 font-medium transition-colors hover:bg-[color-mix(in_oklab,var(--foreground)_6%,transparent)]"
+              className="block rounded-md px-3 py-2 font-medium transition-colors hover:bg-subtle"
             >
               {item.label}
             </Link>
@@ -55,7 +55,7 @@ export default async function AdminLayout({
           </p>
         </div>
       </aside>
-      <main className="min-w-0 flex-1 py-4 pr-2">{children}</main>
+      <main className="min-w-0 flex-1 p-8">{children}</main>
     </div>
   );
 }

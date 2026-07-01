@@ -31,7 +31,7 @@ export function OnboardingForm({ verticals }: { verticals: VerticalPreset[] }) {
           {verticals.map((v, i) => (
             <label
               key={v.id}
-              className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-strong bg-[color-mix(in_oklab,var(--surface)_50%,transparent)] p-3 text-sm transition has-[:checked]:border-brand-accent has-[:checked]:bg-[color-mix(in_oklab,var(--brand-accent)_8%,transparent)]"
+              className="flex cursor-pointer items-center gap-2 rounded-md border border-border-strong p-3 text-sm transition-colors has-[:checked]:border-brand has-[:checked]:bg-subtle"
             >
               <input
                 type="radio"

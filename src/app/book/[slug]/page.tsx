@@ -29,7 +29,7 @@ export default async function ServicePickerPage({
           <li key={s.id}>
             <Link
               href={`/book/${slug}/${s.id}`}
-              className="flex items-center justify-between rounded-xl border border-border-strong bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] p-4 transition hover:-translate-y-0.5 hover:border-[var(--brand-accent)]"
+              className="flex items-center justify-between rounded-md border border-border p-4 transition-colors hover:bg-subtle"
             >
               <div>
                 <p className="font-medium">{s.name}</p>

@@ -37,7 +37,7 @@ export default async function MyAppointmentsPage() {
           {rows.map((a) => (
             <li
               key={a.id}
-              className="card flex items-center justify-between p-4 transition-transform hover:-translate-y-0.5"
+              className="card flex items-center justify-between p-4"
             >
               <div>
                 <p className="font-medium">

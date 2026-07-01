@@ -9,7 +9,7 @@ export default function LandingPage() {
         <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-7xl">
           One booking engine.
           <br />
-          <span className="text-brand-accent">Every business.</span>
+          Every business.
         </h1>
         <p className="mx-auto max-w-xl text-lg text-muted">
           The same reliable calendar core, skinned for your trade. Launch a
@@ -30,7 +30,7 @@ export default function LandingPage() {
         {VERTICAL_LIST.map((v) => (
           <li
             key={v.id}
-            className="glass group flex flex-col items-center gap-2 p-5 text-sm font-medium transition-transform hover:-translate-y-1"
+            className="card flex flex-col items-center gap-2 p-5 text-sm font-medium transition-colors hover:bg-subtle"
           >
             <span
               className="h-1.5 w-8 rounded-full"

@@ -31,7 +31,7 @@ export default async function ConfirmedPage({
   return (
     <section className="space-y-6 text-center">
       <div
-        className="mx-auto flex h-16 w-16 items-center justify-center rounded-full text-3xl text-white shadow-[0_6px_20px_color-mix(in_oklab,var(--brand-accent)_45%,transparent)]"
+        className="mx-auto flex h-16 w-16 items-center justify-center rounded-full text-3xl text-white"
         style={{ backgroundColor: "var(--brand-accent)" }}
       >
         ✓

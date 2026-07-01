@@ -52,7 +52,7 @@ export function WeekGrid({
               {items.map((a) => (
                 <li
                   key={a.id}
-                  className="rounded-md border-l-2 bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)] p-1.5"
+                  className="rounded-md border-l-2 bg-subtle p-1.5"
                   style={{ borderLeftColor: a.staff.color }}
                 >
                   <span className="block font-medium">{time(a.start_at)}</span>

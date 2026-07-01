@@ -82,10 +82,10 @@ export function ReschedulePicker(props: Props) {
               key={iso}
               type="button"
               onClick={() => setSelected(iso)}
-              className={`rounded-lg border px-2 py-2 text-sm font-medium transition ${
+              className={`rounded-md border px-2 py-2 text-sm font-medium transition-colors ${
                 selected === iso
-                  ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-white shadow-[0_2px_10px_color-mix(in_oklab,var(--brand-accent)_35%,transparent)]"
-                  : "border-border-strong hover:-translate-y-0.5 hover:border-[var(--brand-accent)]"
+                  ? "border-brand bg-brand text-white"
+                  : "border-border-strong hover:bg-subtle"
               }`}
             >
               {fmt(iso)}
