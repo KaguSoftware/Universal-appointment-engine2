@@ -33,7 +33,6 @@ export function SlotPicker({ tenant, service, staff }: Props) {
 
   useEffect(() => {
     if (!staffId) return;
-    setSelected(null);
     startLoading(async () => {
       const result = await fetchSlots({
         serviceId: service.id,
@@ -43,6 +42,7 @@ export function SlotPicker({ tenant, service, staff }: Props) {
         tenantId: tenant.id,
       });
       setSlots(result);
+      setSelected(null);
     });
   }, [staffId, date, service.id, tenant.id, tenant.timezone]);
 
