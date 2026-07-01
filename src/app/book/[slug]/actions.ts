@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { BookingService } from "@/lib/booking";
+import { AppointmentNotifier } from "@/lib/integrations/notifications/appointment-notifier";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -63,6 +64,7 @@ export async function bookAppointment(
       startISO: String(formData.get("startISO")),
       notes: String(formData.get("notes") || "") || undefined,
     });
+    await new AppointmentNotifier().notify(appt.id, "confirmation");
     redirect(`/book/${slug}/confirmed?id=${appt.id}`);
   } catch (e) {
     const code = e instanceof Error ? e.message : "";
