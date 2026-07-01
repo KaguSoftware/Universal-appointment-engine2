@@ -20,36 +20,36 @@ export default async function BillingPage({
 
   return (
     <main className="mx-auto max-w-lg space-y-6 py-4">
-      <h1 className="text-2xl font-bold">Plan &amp; billing</h1>
+      <h1 className="text-3xl font-semibold">Plan &amp; billing</h1>
 
       {status === "success" && (
-        <p className="rounded border border-green-300 bg-green-50 p-3 text-sm text-green-800">
+        <p className="rounded-xl border border-success/30 bg-[color-mix(in_oklab,var(--success)_10%,transparent)] p-3 text-sm text-success">
           You&apos;re on Pro. Thanks for upgrading!
         </p>
       )}
       {status === "failed" && (
-        <p className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800">
+        <p className="rounded-xl border border-danger/30 bg-[color-mix(in_oklab,var(--danger)_10%,transparent)] p-3 text-sm text-danger">
           Payment could not be verified. Please try again.
         </p>
       )}
 
-      <div className="rounded-lg border p-5">
-        <p className="text-sm text-gray-500">Current plan</p>
-        <p className="text-xl font-semibold capitalize">{ctx.tenant.plan}</p>
+      <div className="card p-5">
+        <p className="label-text">Current plan</p>
+        <p className="mt-1 text-xl font-semibold capitalize">{ctx.tenant.plan}</p>
       </div>
 
       {!isPro && (
-        <div className="rounded-lg border p-5">
+        <div className="glass p-6">
           <h2 className="text-lg font-semibold">Upgrade to Pro</h2>
-          <ul className="mt-3 space-y-1 text-sm">
+          <ul className="mt-4 space-y-2 text-sm">
             {PRO_FEATURES.map((f) => (
-              <li key={f}>✓ {f}</li>
+              <li key={f} className="flex items-center gap-2">
+                <span className="text-brand-accent">✓</span> {f}
+              </li>
             ))}
           </ul>
-          <form action={startProCheckout} className="mt-4">
-            <button className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
-              Upgrade with Iyzico
-            </button>
+          <form action={startProCheckout} className="mt-5">
+            <button className="btn-accent">Upgrade with Iyzico</button>
           </form>
         </div>
       )}

@@ -22,10 +22,17 @@ export function AuthForm({ mode, next }: Props) {
   const isRegister = mode === "register";
 
   return (
-    <div className="mx-auto w-full max-w-sm space-y-6">
-      <h1 className="text-2xl font-semibold">
-        {isRegister ? "Create your account" : "Sign in"}
-      </h1>
+    <div className="glass mx-auto w-full max-w-sm space-y-6 p-8">
+      <div className="space-y-1 text-center">
+        <h1 className="text-2xl font-semibold">
+          {isRegister ? "Create your account" : "Welcome back"}
+        </h1>
+        <p className="text-sm text-muted">
+          {isRegister
+            ? "Start taking bookings today."
+            : "Sign in to your dashboard."}
+        </p>
+      </div>
 
       <form action={formAction} className="space-y-4">
         {next && <input type="hidden" name="next" value={next} />}
@@ -36,42 +43,41 @@ export function AuthForm({ mode, next }: Props) {
         <Field name="password" label="Password" type="password" required />
 
         {state.error && (
-          <p className="text-sm text-red-600" role="alert">
+          <p className="text-sm text-danger" role="alert">
             {state.error}
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={pending}
-          className="w-full rounded-md bg-gray-900 px-4 py-2 font-medium text-white disabled:opacity-50 dark:bg-white dark:text-gray-900"
-        >
+        <button type="submit" disabled={pending} className="btn-primary w-full">
           {pending ? "Please wait…" : isRegister ? "Sign up" : "Sign in"}
         </button>
       </form>
 
+      <div className="flex items-center gap-3 text-xs text-faint">
+        <span className="h-px flex-1 bg-border" />
+        or
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
       <form action={signInWithGoogle}>
         {next && <input type="hidden" name="next" value={next} />}
-        <button
-          type="submit"
-          className="w-full rounded-md border border-gray-300 px-4 py-2 font-medium hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-800"
-        >
+        <button type="submit" className="btn-ghost w-full">
           Continue with Google
         </button>
       </form>
 
-      <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-center text-sm text-muted">
         {isRegister ? (
           <>
             Already have an account?{" "}
-            <Link href="/auth/login" className="underline">
+            <Link href="/auth/login" className="font-medium text-brand-accent">
               Sign in
             </Link>
           </>
         ) : (
           <>
             No account?{" "}
-            <Link href="/auth/register" className="underline">
+            <Link href="/auth/register" className="font-medium text-brand-accent">
               Sign up
             </Link>
           </>
@@ -93,14 +99,9 @@ function Field({
   required?: boolean;
 }) {
   return (
-    <label className="block space-y-1">
-      <span className="text-sm font-medium">{label}</span>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        className="w-full rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-900"
-      />
+    <label className="block space-y-1.5">
+      <span className="label-text">{label}</span>
+      <input name={name} type={type} required={required} className="field" />
     </label>
   );
 }

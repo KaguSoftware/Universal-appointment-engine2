@@ -1,26 +1,207 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+ * Universal Appointment Engine — design system
+ * Minimalist, soft neutrals, liquid-glass surfaces.
+ * ------------------------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Neutrals */
+  --background: #f7f7f8;
+  --surface: #ffffff;
+  --foreground: #1a1a1f;
+  --muted: #6b7280;
+  --faint: #9ca3af;
+  --border: #e7e7ea;
+  --border-strong: #d6d6db;
+
+  /* Brand (overridable per-tenant via --brand / --brand-accent) */
+  --brand: #1a1a1f;
+  --brand-accent: #4f46e5;
+
+  /* Feedback */
+  --danger: #dc2626;
+  --success: #059669;
+  --warning: #b45309;
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 8px 32px rgba(17, 17, 26, 0.06);
+
+  --radius: 0.85rem;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-border: var(--border);
+  --color-brand: var(--brand);
+  --color-brand-accent: var(--brand-accent);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0b0b0f;
+    --surface: #16161c;
+    --foreground: #ededf0;
+    --muted: #9ca3af;
+    --faint: #6b7280;
+    --border: #26262e;
+    --border-strong: #35353f;
+    --brand: #ededf0;
+    --glass-bg: rgba(30, 30, 38, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 }
 
-body {
-  background: var(--background);
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    /* soft ambient wash behind the glass */
+    background-image:
+      radial-gradient(60rem 60rem at 15% -10%, color-mix(in oklab, var(--brand-accent) 12%, transparent), transparent 60%),
+      radial-gradient(50rem 50rem at 100% 0%, color-mix(in oklab, var(--brand-accent) 8%, transparent), transparent 55%);
+    background-attachment: fixed;
+  }
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ---------------------------- utilities --------------------------- */
+
+/* Frosted glass surface */
+@utility glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--radius);
+}
+
+/* Plain solid card */
+@utility card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(17, 17, 26, 0.04);
+}
+
+/* Primary button (brand-filled) */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.7rem;
+  background: var(--brand);
+  color: color-mix(in oklab, var(--background) 92%, white);
+  padding: 0.6rem 1.1rem;
+  font-weight: 550;
+  font-size: 0.925rem;
+  transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 2px rgba(17, 17, 26, 0.12);
+  &:hover { filter: brightness(1.12); box-shadow: 0 4px 14px rgba(17, 17, 26, 0.14); }
+  &:active { transform: translateY(0.5px) scale(0.99); }
+  &:disabled { opacity: 0.5; pointer-events: none; }
+}
+
+/* Accent button (uses tenant accent) */
+@utility btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.7rem;
+  background: var(--brand-accent);
+  color: #fff;
+  padding: 0.6rem 1.1rem;
+  font-weight: 550;
+  font-size: 0.925rem;
+  transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 10px color-mix(in oklab, var(--brand-accent) 35%, transparent);
+  &:hover { filter: brightness(1.08); }
+  &:active { transform: translateY(0.5px) scale(0.99); }
+  &:disabled { opacity: 0.5; pointer-events: none; }
+}
+
+/* Secondary / ghost button */
+@utility btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.7rem;
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  border: 1px solid var(--border-strong);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 0.55rem 1.05rem;
+  font-weight: 500;
+  font-size: 0.925rem;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  backdrop-filter: blur(8px);
+  &:hover { background: color-mix(in oklab, var(--foreground) 5%, transparent); }
+  &:disabled { opacity: 0.5; pointer-events: none; }
+}
+
+/* Text input / select / textarea */
+@utility field {
+  width: 100%;
+  border-radius: 0.7rem;
+  border: 1px solid var(--border-strong);
+  background: color-mix(in oklab, var(--surface) 85%, transparent);
+  padding: 0.55rem 0.8rem;
+  font-size: 0.925rem;
+  color: var(--foreground);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  &:focus {
+    outline: none;
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-accent) 20%, transparent);
+  }
+}
+
+@utility label-text {
+  font-size: 0.8rem;
+  font-weight: 550;
+  color: var(--muted);
+}
+
+/* Small uppercase pill / badge */
+@utility badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: color-mix(in oklab, var(--foreground) 6%, transparent);
+  color: var(--muted);
+}
+
+/* Muted link */
+@utility link-muted {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+  &:hover { color: var(--foreground); }
 }

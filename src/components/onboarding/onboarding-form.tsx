@@ -17,26 +17,21 @@ export function OnboardingForm({ verticals }: { verticals: VerticalPreset[] }) {
       : "UTC";
 
   return (
-    <form action={action} className="mx-auto w-full max-w-md space-y-6">
+    <form action={action} className="glass mx-auto w-full max-w-md space-y-6 p-8">
       <h1 className="text-2xl font-semibold">Set up your business</h1>
 
-      <label className="block space-y-1">
-        <span className="text-sm font-medium">Business name</span>
-        <input
-          name="businessName"
-          required
-          minLength={2}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-900"
-        />
+      <label className="block space-y-1.5">
+        <span className="label-text">Business name</span>
+        <input name="businessName" required minLength={2} className="field" />
       </label>
 
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium">Choose your type</legend>
+        <legend className="label-text">Choose your type</legend>
         <div className="grid grid-cols-2 gap-2">
           {verticals.map((v, i) => (
             <label
               key={v.id}
-              className="flex cursor-pointer items-center gap-2 rounded-md border border-gray-300 p-3 text-sm has-[:checked]:border-gray-900 dark:border-gray-600 dark:has-[:checked]:border-white"
+              className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-strong bg-[color-mix(in_oklab,var(--surface)_50%,transparent)] p-3 text-sm transition has-[:checked]:border-brand-accent has-[:checked]:bg-[color-mix(in_oklab,var(--brand-accent)_8%,transparent)]"
             >
               <input
                 type="radio"
@@ -54,16 +49,12 @@ export function OnboardingForm({ verticals }: { verticals: VerticalPreset[] }) {
       <input type="hidden" name="timezone" value={tz} />
 
       {state.error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm text-danger" role="alert">
           {state.error}
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="w-full rounded-md bg-gray-900 px-4 py-2 font-medium text-white disabled:opacity-50 dark:bg-white dark:text-gray-900"
-      >
+      <button type="submit" disabled={pending} className="btn-primary w-full">
         {pending ? "Creating…" : "Create business"}
       </button>
     </form>

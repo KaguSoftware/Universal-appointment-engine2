@@ -38,16 +38,16 @@ export default async function StaffPage() {
 
   return (
     <div className="max-w-2xl space-y-8">
-      <h1 className="text-2xl font-bold">Staff</h1>
+      <h1 className="text-3xl font-semibold">Staff</h1>
 
       {detailed.map(({ staff: s, assigned, rules, overrides }) => {
         return (
-          <div key={s.id} className="space-y-3 rounded-lg border p-4">
+          <div key={s.id} className="card space-y-3 p-5">
             <div className="flex items-center justify-between">
               <span className="font-medium">{s.display_name}</span>
               <form action={deleteStaff}>
                 <input type="hidden" name="id" value={s.id} />
-                <button className="text-sm text-red-600 underline">Remove</button>
+                <button className="text-sm font-medium text-danger">Remove</button>
               </form>
             </div>
 
@@ -68,18 +68,16 @@ export default async function StaffPage() {
               name="display_name"
               required
               placeholder="Name"
-              className="flex-1 rounded border px-2 py-1.5 dark:bg-gray-900"
+              className="field flex-1"
             />
             <input type="hidden" name="active" value="on" />
             <input type="hidden" name="color" value="#4f46e5" />
-            <button className="rounded bg-gray-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
-              Add
-            </button>
+            <button className="btn-primary">Add</button>
           </form>
         ) : (
-          <p className="rounded border border-amber-300 bg-amber-50 p-3 text-sm text-amber-800">
+          <p className="rounded-xl border border-warning/30 bg-[color-mix(in_oklab,var(--warning)_10%,transparent)] p-3 text-sm text-warning">
             Your Free plan allows one staff member.{" "}
-            <a href="/admin/settings/billing" className="underline">
+            <a href="/admin/settings/billing" className="underline font-medium">
               Upgrade to Pro
             </a>{" "}
             to add more.
@@ -94,23 +92,28 @@ function StaffFields({ staff }: { staff: Staff }) {
   return (
     <form action={updateStaff} className="flex items-end gap-2 text-sm">
       <input type="hidden" name="id" value={staff.id} />
-      <label className="space-y-1">
-        <span className="font-medium">Name</span>
+      <label className="space-y-1.5">
+        <span className="label-text">Name</span>
         <input
           name="display_name"
           defaultValue={staff.display_name}
-          className="block rounded border px-2 py-1 dark:bg-gray-900"
+          className="field"
         />
       </label>
-      <label className="space-y-1">
-        <span className="font-medium">Color</span>
-        <input type="color" name="color" defaultValue={staff.color} />
+      <label className="space-y-1.5">
+        <span className="label-text">Color</span>
+        <input
+          type="color"
+          name="color"
+          defaultValue={staff.color}
+          className="block h-9 w-12 cursor-pointer rounded-lg border border-border-strong bg-transparent"
+        />
       </label>
-      <label className="flex items-center gap-1">
+      <label className="flex items-center gap-1.5">
         <input type="checkbox" name="active" defaultChecked={staff.active} />
         Active
       </label>
-      <button className="rounded border px-3 py-1">Save</button>
+      <button className="btn-ghost">Save</button>
     </form>
   );
 }
@@ -118,7 +121,7 @@ function StaffFields({ staff }: { staff: Staff }) {
 function GoogleConnect({ staff, enabled }: { staff: Staff; enabled: boolean }) {
   if (!enabled) {
     return (
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-faint">
         Google Calendar sync is available on the Pro plan.
       </p>
     );
@@ -128,16 +131,16 @@ function GoogleConnect({ staff, enabled }: { staff: Staff; enabled: boolean }) {
       <span className="font-medium">Google Calendar</span>
       {staff.google_calendar_connected ? (
         <>
-          <span className="text-green-700">Connected</span>
+          <span className="text-success">Connected</span>
           <form action={disconnectGoogle}>
             <input type="hidden" name="staffId" value={staff.id} />
-            <button className="text-red-600 underline">Disconnect</button>
+            <button className="font-medium text-danger">Disconnect</button>
           </form>
         </>
       ) : (
         <a
           href={`/api/integrations/google/connect?staff=${staff.id}`}
-          className="underline"
+          className="font-medium text-brand-accent"
         >
           Connect
         </a>
@@ -158,10 +161,10 @@ function ServiceAssignment({
   return (
     <form action={setStaffServices} className="space-y-2 text-sm">
       <input type="hidden" name="staffId" value={staff.id} />
-      <p className="font-medium">Services offered</p>
-      <div className="flex flex-wrap gap-2">
+      <p className="label-text">Services offered</p>
+      <div className="flex flex-wrap gap-3">
         {services.map((svc) => (
-          <label key={svc.id} className="flex items-center gap-1">
+          <label key={svc.id} className="flex items-center gap-1.5">
             <input
               type="checkbox"
               name="serviceIds"
@@ -172,7 +175,7 @@ function ServiceAssignment({
           </label>
         ))}
       </div>
-      <button className="rounded border px-3 py-1">Save services</button>
+      <button className="btn-ghost">Save services</button>
     </form>
   );
 }

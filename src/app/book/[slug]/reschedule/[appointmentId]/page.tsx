@@ -33,12 +33,12 @@ export default async function ReschedulePage({
 
   return (
     <section className="space-y-6">
-      <Link href="/my/appointments" className="text-sm underline">
+      <Link href="/my/appointments" className="link-muted text-sm">
         ← Back
       </Link>
       <div>
         <h2 className="text-lg font-semibold">Reschedule {data.services.name}</h2>
-        <p className="text-sm text-gray-500">Currently: {current}</p>
+        <p className="text-sm text-muted">Currently: {current}</p>
       </div>
 
       <ReschedulePicker

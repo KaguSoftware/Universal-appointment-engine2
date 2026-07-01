@@ -21,25 +21,31 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Today</h1>
-      {today.length === 0 ? (
-        <p className="text-sm text-gray-500">
-          No {terms.appointment.toLowerCase()}s scheduled today.
+      <div>
+        <h1 className="text-3xl font-semibold">Today</h1>
+        <p className="mt-1 text-sm text-muted">
+          {today.length} {terms.appointment.toLowerCase()}
+          {today.length === 1 ? "" : "s"} scheduled.
         </p>
+      </div>
+      {today.length === 0 ? (
+        <div className="glass p-10 text-center text-sm text-muted">
+          No {terms.appointment.toLowerCase()}s scheduled today.
+        </div>
       ) : (
         <ul className="space-y-2">
           {today.map((a) => (
             <li
               key={a.id}
-              className="flex items-center gap-3 rounded-lg border p-3"
+              className="card flex items-center gap-3 p-4 transition-transform hover:-translate-y-0.5"
             >
               <span
-                className="h-8 w-1 rounded"
+                className="h-9 w-1.5 rounded-full"
                 style={{ backgroundColor: a.staff.color }}
               />
               <div className="flex-1">
                 <p className="font-medium">{a.services.name}</p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted">
                   {new Intl.DateTimeFormat("en", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -48,7 +54,7 @@ export default async function AdminDashboard() {
                   · {a.staff.display_name}
                 </p>
               </div>
-              <span className="text-xs uppercase text-gray-400">{a.status}</span>
+              <span className="badge">{a.status}</span>
             </li>
           ))}
         </ul>

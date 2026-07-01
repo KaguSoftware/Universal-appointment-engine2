@@ -21,16 +21,19 @@ export default async function BookLayout({
 
   return (
     <TenantTheme tenant={tenant}>
-      <div className="mx-auto min-h-screen w-full max-w-2xl px-6 py-10">
-        <header className="mb-8 border-b pb-4">
-          <h1 className="text-2xl font-bold" style={{ color: "var(--brand)" }}>
+      <div className="mx-auto min-h-screen w-full max-w-xl px-6 py-12">
+        <header className="mb-8">
+          <h1
+            className="text-3xl font-semibold tracking-tight"
+            style={{ color: "var(--brand)" }}
+          >
             {tenant.name}
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="mt-1 text-sm text-muted">
             Book your {terms.appointment.toLowerCase()}
           </p>
         </header>
-        {children}
+        <div className="glass p-6 sm:p-8">{children}</div>
       </div>
     </TenantTheme>
   );

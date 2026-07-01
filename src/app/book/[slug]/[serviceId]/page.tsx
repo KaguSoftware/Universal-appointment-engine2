@@ -24,16 +24,16 @@ export default async function SlotPickerPage({
 
   return (
     <section className="space-y-6">
-      <Link href={`/book/${slug}`} className="text-sm underline">
+      <Link href={`/book/${slug}`} className="link-muted text-sm">
         ← Back
       </Link>
       <div>
         <h2 className="text-lg font-semibold">{service.name}</h2>
-        <p className="text-sm text-gray-500">{service.duration_min} min</p>
+        <p className="text-sm text-muted">{service.duration_min} min</p>
       </div>
 
       {staff.length === 0 ? (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted">
           No providers are available for this service yet.
         </p>
       ) : (

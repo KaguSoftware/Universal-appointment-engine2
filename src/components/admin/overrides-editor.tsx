@@ -10,8 +10,8 @@ export function OverridesEditor({
   overrides: AvailabilityOverride[];
 }) {
   return (
-    <div className="space-y-3 rounded-lg border p-4">
-      <p className="text-sm font-medium">Time off &amp; extra hours</p>
+    <div className="space-y-3 rounded-xl border border-border bg-[color-mix(in_oklab,var(--surface)_50%,transparent)] p-4">
+      <p className="label-text">Time off &amp; extra hours</p>
 
       {overrides.length > 0 && (
         <ul className="space-y-1 text-sm">
@@ -23,7 +23,7 @@ export function OverridesEditor({
               </span>
               <form action={removeOverride}>
                 <input type="hidden" name="id" value={o.id} />
-                <button className="text-red-600 underline">Remove</button>
+                <button className="font-medium text-danger">Remove</button>
               </form>
             </li>
           ))}
@@ -32,30 +32,25 @@ export function OverridesEditor({
 
       <form action={addOverride} className="flex flex-wrap items-end gap-2 text-sm">
         <input type="hidden" name="staffId" value={staffId} />
-        <select name="type" className="rounded border px-2 py-1 dark:bg-gray-900">
+        <select name="type" className="field w-auto">
           <option value="block">Time off</option>
           <option value="extra">Extra hours</option>
         </select>
-        <input
-          type="date"
-          name="date"
-          required
-          className="rounded border px-2 py-1 dark:bg-gray-900"
-        />
+        <input type="date" name="date" required className="field w-auto" />
         <input
           type="time"
           name="start_time"
           defaultValue="09:00"
-          className="rounded border px-2 py-1 dark:bg-gray-900"
+          className="field w-auto"
         />
         <span>–</span>
         <input
           type="time"
           name="end_time"
           defaultValue="17:00"
-          className="rounded border px-2 py-1 dark:bg-gray-900"
+          className="field w-auto"
         />
-        <button className="rounded border px-3 py-1">Add</button>
+        <button className="btn-ghost">Add</button>
       </form>
     </div>
   );

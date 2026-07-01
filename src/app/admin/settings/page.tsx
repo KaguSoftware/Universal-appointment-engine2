@@ -11,17 +11,17 @@ export default async function SettingsPage() {
 
   return (
     <div className="max-w-xl space-y-8">
-      <h1 className="text-2xl font-bold">Settings</h1>
+      <h1 className="text-3xl font-semibold">Settings</h1>
 
-      <form action={updateSettings} className="space-y-4">
+      <form action={updateSettings} className="card space-y-4 p-6">
         <Text name="name" label="Business name" value={ctx.tenant.name} />
         <Text name="timezone" label="Timezone" value={ctx.tenant.timezone} />
 
         <fieldset
-          className="space-y-3 rounded-lg border p-4"
+          className="space-y-3 rounded-xl border border-border p-4"
           disabled={!branding}
         >
-          <legend className="px-1 text-sm font-medium">
+          <legend className="label-text px-1">
             Branding {!branding && "(Pro)"}
           </legend>
           <div className="flex gap-4">
@@ -33,8 +33,8 @@ export default async function SettingsPage() {
           <Text name="term_appointment" label="Appointment label" value={terms.appointment} />
           <Text name="term_customer" label="Customer label" value={terms.customer} />
           {!branding && (
-            <p className="text-sm text-amber-700">
-              <Link href="/admin/settings/billing" className="underline">
+            <p className="text-sm text-warning">
+              <Link href="/admin/settings/billing" className="underline font-medium">
                 Upgrade to Pro
               </Link>{" "}
               to customize branding and terminology.
@@ -42,19 +42,17 @@ export default async function SettingsPage() {
           )}
         </fieldset>
 
-        <button className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
-          Save settings
-        </button>
+        <button className="btn-primary">Save settings</button>
       </form>
 
-      <section className="rounded-lg border p-4">
+      <section className="card p-6">
         <h2 className="font-semibold">Plan &amp; billing</h2>
-        <p className="mt-1 text-sm text-gray-500">
-          You are on the <strong>{ctx.tenant.plan}</strong> plan.
+        <p className="mt-1 text-sm text-muted">
+          You are on the <strong className="text-foreground">{ctx.tenant.plan}</strong> plan.
         </p>
         <Link
           href="/admin/settings/billing"
-          className="mt-2 inline-block text-sm underline"
+          className="mt-3 inline-block text-sm font-medium text-brand-accent"
         >
           Manage billing →
         </Link>
@@ -73,13 +71,9 @@ function Text({
   value: string;
 }) {
   return (
-    <label className="block space-y-1">
-      <span className="text-sm font-medium">{label}</span>
-      <input
-        name={name}
-        defaultValue={value}
-        className="w-full rounded border px-3 py-2 dark:bg-gray-900"
-      />
+    <label className="block space-y-1.5">
+      <span className="label-text">{label}</span>
+      <input name={name} defaultValue={value} className="field" />
     </label>
   );
 }
@@ -94,13 +88,13 @@ function Color({
   value?: string;
 }) {
   return (
-    <label className="space-y-1">
-      <span className="text-sm font-medium">{label}</span>
+    <label className="space-y-1.5">
+      <span className="label-text">{label}</span>
       <input
         type="color"
         name={name}
         defaultValue={value ?? "#1f2937"}
-        className="block h-9 w-16"
+        className="block h-10 w-16 cursor-pointer rounded-lg border border-border-strong bg-transparent"
       />
     </label>
   );

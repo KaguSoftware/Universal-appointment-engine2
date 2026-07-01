@@ -21,39 +21,41 @@ export default async function AdminLayout({
   const terms = resolveTerminology(ctx.tenant);
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="w-56 shrink-0 border-r bg-gray-50 p-4 dark:bg-gray-900">
-        <div className="mb-6">
-          <p className="font-semibold">{ctx.tenant.name}</p>
-          <p className="text-xs uppercase text-gray-400">
-            {ctx.tenant.plan} plan
+    <div className="flex min-h-screen gap-6 p-4">
+      <aside className="glass sticky top-4 flex h-[calc(100vh-2rem)] w-60 shrink-0 flex-col p-5">
+        <div className="mb-8">
+          <p className="text-lg font-semibold tracking-tight">
+            {ctx.tenant.name}
           </p>
+          <span className="badge mt-2">{ctx.tenant.plan} plan</span>
         </div>
         <nav className="space-y-1 text-sm">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="block rounded px-2 py-1.5 hover:bg-gray-200 dark:hover:bg-gray-800"
+              className="block rounded-lg px-3 py-2 font-medium transition-colors hover:bg-[color-mix(in_oklab,var(--foreground)_6%,transparent)]"
             >
               {item.label}
             </Link>
           ))}
           <Link
             href={`/book/${ctx.tenant.slug}`}
-            className="block rounded px-2 py-1.5 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800"
+            className="link-muted block rounded-lg px-3 py-2"
           >
             View booking page ↗
           </Link>
         </nav>
-        <form action={signOut} className="mt-6">
-          <button className="text-sm text-gray-500 underline">Sign out</button>
-        </form>
-        <p className="mt-6 text-xs text-gray-400">
-          {terms.provider} · {terms.customer}
-        </p>
+        <div className="mt-auto space-y-4 pt-6">
+          <form action={signOut}>
+            <button className="link-muted text-sm">Sign out</button>
+          </form>
+          <p className="text-xs text-faint">
+            {terms.provider} · {terms.customer}
+          </p>
+        </div>
       </aside>
-      <main className="flex-1 p-8">{children}</main>
+      <main className="min-w-0 flex-1 py-4 pr-2">{children}</main>
     </div>
   );
 }

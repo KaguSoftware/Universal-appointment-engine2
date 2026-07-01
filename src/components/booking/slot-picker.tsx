@@ -57,12 +57,12 @@ export function SlotPicker({ tenant, service, staff }: Props) {
   return (
     <div className="space-y-6">
       {staff.length > 1 && (
-        <label className="block space-y-1">
-          <span className="text-sm font-medium">Provider</span>
+        <label className="block space-y-1.5">
+          <span className="label-text">Provider</span>
           <select
             value={staffId}
             onChange={(e) => setStaffId(e.target.value)}
-            className="w-full rounded-md border px-3 py-2 dark:bg-gray-900"
+            className="field"
           >
             {staff.map((s) => (
               <option key={s.id} value={s.id}>
@@ -73,23 +73,23 @@ export function SlotPicker({ tenant, service, staff }: Props) {
         </label>
       )}
 
-      <label className="block space-y-1">
-        <span className="text-sm font-medium">Date</span>
+      <label className="block space-y-1.5">
+        <span className="label-text">Date</span>
         <input
           type="date"
           value={date}
           min={todayISO()}
           onChange={(e) => setDate(e.target.value)}
-          className="w-full rounded-md border px-3 py-2 dark:bg-gray-900"
+          className="field"
         />
       </label>
 
       <div className="space-y-2">
-        <span className="text-sm font-medium">Available times</span>
+        <span className="label-text">Available times</span>
         {loading ? (
-          <p className="text-sm text-gray-500">Loading…</p>
+          <p className="text-sm text-muted">Loading…</p>
         ) : slots.length === 0 ? (
-          <p className="text-sm text-gray-500">No times available on this day.</p>
+          <p className="text-sm text-muted">No times available on this day.</p>
         ) : (
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
             {slots.map((iso) => (
@@ -97,10 +97,10 @@ export function SlotPicker({ tenant, service, staff }: Props) {
                 key={iso}
                 type="button"
                 onClick={() => setSelected(iso)}
-                className={`rounded-md border px-2 py-2 text-sm ${
+                className={`rounded-lg border px-2 py-2 text-sm font-medium transition ${
                   selected === iso
-                    ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-white"
-                    : "hover:border-[var(--brand-accent)]"
+                    ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-white shadow-[0_2px_10px_color-mix(in_oklab,var(--brand-accent)_35%,transparent)]"
+                    : "border-border-strong hover:-translate-y-0.5 hover:border-[var(--brand-accent)]"
                 }`}
               >
                 {formatSlot(iso)}
@@ -111,7 +111,7 @@ export function SlotPicker({ tenant, service, staff }: Props) {
       </div>
 
       {selected && (
-        <form action={submit} className="space-y-3 border-t pt-4">
+        <form action={submit} className="space-y-3 border-t border-border pt-5">
           <input type="hidden" name="slug" value={tenant.slug} />
           <input type="hidden" name="tenantId" value={tenant.id} />
           <input type="hidden" name="serviceId" value={service.id} />
@@ -120,19 +120,18 @@ export function SlotPicker({ tenant, service, staff }: Props) {
           <textarea
             name="notes"
             placeholder="Notes (optional)"
-            className="w-full rounded-md border px-3 py-2 text-sm dark:bg-gray-900"
+            className="field text-sm"
             rows={2}
           />
           {state.error && (
-            <p className="text-sm text-red-600" role="alert">
+            <p className="text-sm text-danger" role="alert">
               {state.error}
             </p>
           )}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-md px-4 py-2 font-medium text-white disabled:opacity-50"
-            style={{ backgroundColor: "var(--brand)" }}
+            className="btn-accent w-full"
           >
             {submitting ? "Booking…" : `Confirm ${formatSlot(selected)}`}
           </button>

@@ -27,44 +27,44 @@ export default async function MyAppointmentsPage() {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-2xl px-6 py-10">
-      <h1 className="mb-6 text-2xl font-bold">My appointments</h1>
+      <h1 className="mb-6 text-3xl font-semibold">My appointments</h1>
       {rows.length === 0 ? (
-        <p className="text-sm text-gray-500">You have no appointments yet.</p>
+        <div className="glass p-10 text-center text-sm text-muted">
+          You have no appointments yet.
+        </div>
       ) : (
         <ul className="space-y-3">
           {rows.map((a) => (
             <li
               key={a.id}
-              className="flex items-center justify-between rounded-lg border p-4"
+              className="card flex items-center justify-between p-4 transition-transform hover:-translate-y-0.5"
             >
               <div>
                 <p className="font-medium">
                   {a.services.name}{" "}
-                  <span className="text-gray-500">· {a.tenants.name}</span>
+                  <span className="text-muted">· {a.tenants.name}</span>
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted">
                   {new Intl.DateTimeFormat("en", {
                     dateStyle: "medium",
                     timeStyle: "short",
                   }).format(new Date(a.start_at))}
                 </p>
                 {a.status !== "booked" && (
-                  <span className="text-xs uppercase text-gray-400">
-                    {a.status}
-                  </span>
+                  <span className="badge mt-1">{a.status}</span>
                 )}
               </div>
               {a.status === "booked" && (
                 <div className="flex items-center gap-3">
                   <Link
                     href={`/book/${a.tenants.slug}/reschedule/${a.id}`}
-                    className="text-sm underline"
+                    className="text-sm font-medium text-brand-accent"
                   >
                     Reschedule
                   </Link>
                   <form action={cancelMyAppointment}>
                     <input type="hidden" name="id" value={a.id} />
-                    <button className="text-sm text-red-600 underline">
+                    <button className="text-sm font-medium text-danger">
                       Cancel
                     </button>
                   </form>

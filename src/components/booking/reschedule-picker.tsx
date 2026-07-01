@@ -60,21 +60,21 @@ export function ReschedulePicker(props: Props) {
 
   return (
     <div className="space-y-6">
-      <label className="block space-y-1">
-        <span className="text-sm font-medium">New date</span>
+      <label className="block space-y-1.5">
+        <span className="label-text">New date</span>
         <input
           type="date"
           value={date}
           min={new Date().toISOString().slice(0, 10)}
           onChange={(e) => setDate(e.target.value)}
-          className="w-full rounded-md border px-3 py-2 dark:bg-gray-900"
+          className="field"
         />
       </label>
 
       {loading ? (
-        <p className="text-sm text-gray-500">Loading…</p>
+        <p className="text-sm text-muted">Loading…</p>
       ) : slots.length === 0 ? (
-        <p className="text-sm text-gray-500">No times available on this day.</p>
+        <p className="text-sm text-muted">No times available on this day.</p>
       ) : (
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {slots.map((iso) => (
@@ -82,10 +82,10 @@ export function ReschedulePicker(props: Props) {
               key={iso}
               type="button"
               onClick={() => setSelected(iso)}
-              className={`rounded-md border px-2 py-2 text-sm ${
+              className={`rounded-lg border px-2 py-2 text-sm font-medium transition ${
                 selected === iso
-                  ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-white"
-                  : "hover:border-[var(--brand-accent)]"
+                  ? "border-[var(--brand-accent)] bg-[var(--brand-accent)] text-white shadow-[0_2px_10px_color-mix(in_oklab,var(--brand-accent)_35%,transparent)]"
+                  : "border-border-strong hover:-translate-y-0.5 hover:border-[var(--brand-accent)]"
               }`}
             >
               {fmt(iso)}
@@ -95,20 +95,19 @@ export function ReschedulePicker(props: Props) {
       )}
 
       {selected && (
-        <form action={submit} className="space-y-3 border-t pt-4">
+        <form action={submit} className="space-y-3 border-t border-border pt-5">
           <input type="hidden" name="slug" value={props.slug} />
           <input type="hidden" name="appointmentId" value={props.appointmentId} />
           <input type="hidden" name="startISO" value={selected} />
           {state.error && (
-            <p className="text-sm text-red-600" role="alert">
+            <p className="text-sm text-danger" role="alert">
               {state.error}
             </p>
           )}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-md px-4 py-2 font-medium text-white disabled:opacity-50"
-            style={{ backgroundColor: "var(--brand)" }}
+            className="btn-accent w-full"
           >
             {submitting ? "Rescheduling…" : `Move to ${fmt(selected)}`}
           </button>

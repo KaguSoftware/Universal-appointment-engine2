@@ -7,16 +7,16 @@ export function ServiceForm({ service }: { service?: Service }) {
   return (
     <form
       action={editing ? updateService : createService}
-      className="grid grid-cols-2 gap-3 rounded-lg border p-4"
+      className="grid grid-cols-2 gap-3 rounded-xl border border-border bg-[color-mix(in_oklab,var(--surface)_50%,transparent)] p-4"
     >
       {editing && <input type="hidden" name="id" value={service!.id} />}
-      <label className="col-span-2 space-y-1">
-        <span className="text-sm font-medium">Name</span>
+      <label className="col-span-2 space-y-1.5">
+        <span className="label-text">Name</span>
         <input
           name="name"
           required
           defaultValue={service?.name}
-          className="w-full rounded border px-2 py-1.5 dark:bg-gray-900"
+          className="field"
         />
       </label>
       <NumberField name="duration_min" label="Duration (min)" value={service?.duration_min ?? 30} />
@@ -27,7 +27,7 @@ export function ServiceForm({ service }: { service?: Service }) {
         <input type="checkbox" name="active" defaultChecked={service?.active ?? true} />
         Active (bookable)
       </label>
-      <button className="col-span-2 rounded bg-gray-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
+      <button className="btn-primary col-span-2">
         {editing ? "Save changes" : "Add service"}
       </button>
     </form>
@@ -46,15 +46,15 @@ function NumberField({
   step?: string;
 }) {
   return (
-    <label className="space-y-1">
-      <span className="text-sm font-medium">{label}</span>
+    <label className="space-y-1.5">
+      <span className="label-text">{label}</span>
       <input
         type="number"
         name={name}
         min={0}
         step={step ?? "1"}
         defaultValue={value}
-        className="w-full rounded border px-2 py-1.5 dark:bg-gray-900"
+        className="field"
       />
     </label>
   );

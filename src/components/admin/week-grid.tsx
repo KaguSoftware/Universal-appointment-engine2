@@ -44,15 +44,15 @@ export function WeekGrid({
         const key = dayKey(`${iso}T12:00:00Z`);
         const items = byDay.get(key) ?? [];
         return (
-          <div key={iso} className="min-h-32 rounded-lg border p-2">
-            <p className="mb-2 font-medium text-gray-500">
+          <div key={iso} className="card min-h-32 p-2">
+            <p className="mb-2 font-medium text-muted">
               {DAY_LABELS[i]} {iso.slice(8)}
             </p>
             <ul className="space-y-1">
               {items.map((a) => (
                 <li
                   key={a.id}
-                  className="rounded border-l-2 bg-gray-50 p-1 dark:bg-gray-800"
+                  className="rounded-md border-l-2 bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)] p-1.5"
                   style={{ borderLeftColor: a.staff.color }}
                 >
                   <span className="block font-medium">{time(a.start_at)}</span>

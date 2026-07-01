@@ -9,13 +9,13 @@ export default async function SuperadminPage() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-4xl px-6 py-10">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Platform admin</h1>
-        <span className="text-sm text-gray-500">{email}</span>
+        <h1 className="text-3xl font-semibold">Platform admin</h1>
+        <span className="text-sm text-muted">{email}</span>
       </div>
 
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b text-left text-gray-500">
+          <tr className="border-b text-left text-muted">
             <th className="py-2">Business</th>
             <th>Vertical</th>
             <th>Staff</th>
@@ -28,7 +28,7 @@ export default async function SuperadminPage() {
             <tr key={t.id} className="border-b">
               <td className="py-2">
                 <p className="font-medium">{t.name}</p>
-                <p className="text-xs text-gray-400">/{t.slug}</p>
+                <p className="text-xs text-faint">/{t.slug}</p>
               </td>
               <td>{t.vertical}</td>
               <td>{t.staff_count}</td>
@@ -38,14 +38,12 @@ export default async function SuperadminPage() {
                   <select
                     name="plan"
                     defaultValue={t.plan}
-                    className="rounded border px-1 py-0.5 dark:bg-gray-900"
+                    className="field w-auto px-2 py-1"
                   >
                     <option value="free">free</option>
                     <option value="pro">pro</option>
                   </select>
-                  <button className="rounded border px-2 py-0.5 text-xs">
-                    Set
-                  </button>
+                  <button className="btn-ghost px-3 py-1 text-xs">Set</button>
                 </form>
               </td>
               <td>
@@ -57,10 +55,8 @@ export default async function SuperadminPage() {
                     value={t.status === "active" ? "suspended" : "active"}
                   />
                   <button
-                    className={`rounded px-2 py-0.5 text-xs ${
-                      t.status === "active"
-                        ? "text-green-700"
-                        : "text-red-700"
+                    className={`rounded px-2 py-0.5 text-xs font-medium ${
+                      t.status === "active" ? "text-success" : "text-danger"
                     }`}
                   >
                     {t.status} · toggle

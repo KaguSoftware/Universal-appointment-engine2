@@ -22,18 +22,18 @@ export default async function ServicePickerPage({
     <section className="space-y-4">
       <h2 className="text-lg font-semibold">Choose a {terms.service.toLowerCase()}</h2>
       {services.length === 0 && (
-        <p className="text-sm text-gray-500">No services available yet.</p>
+        <p className="text-sm text-muted">No services available yet.</p>
       )}
       <ul className="space-y-3">
         {services.map((s) => (
           <li key={s.id}>
             <Link
               href={`/book/${slug}/${s.id}`}
-              className="flex items-center justify-between rounded-lg border p-4 transition hover:border-[var(--brand-accent)]"
+              className="flex items-center justify-between rounded-xl border border-border-strong bg-[color-mix(in_oklab,var(--surface)_60%,transparent)] p-4 transition hover:-translate-y-0.5 hover:border-[var(--brand-accent)]"
             >
               <div>
                 <p className="font-medium">{s.name}</p>
-                <p className="text-sm text-gray-500">{s.duration_min} min</p>
+                <p className="text-sm text-muted">{s.duration_min} min</p>
               </div>
               <span className="font-semibold">
                 {s.price > 0 ? `${s.price} ${s.currency}` : "Free"}

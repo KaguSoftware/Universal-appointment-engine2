@@ -11,21 +11,19 @@ export default async function ServicesPage() {
 
   return (
     <div className="max-w-2xl space-y-8">
-      <h1 className="text-2xl font-bold">Services</h1>
+      <h1 className="text-3xl font-semibold">Services</h1>
 
       <ul className="space-y-4">
         {services.map((s) => (
-          <li key={s.id} className="space-y-2">
+          <li key={s.id} className="card space-y-3 p-5">
             <div className="flex items-center justify-between">
               <span className="font-medium">
                 {s.name}{" "}
-                {!s.active && (
-                  <span className="text-xs text-gray-400">(hidden)</span>
-                )}
+                {!s.active && <span className="badge">hidden</span>}
               </span>
               <form action={deleteService}>
                 <input type="hidden" name="id" value={s.id} />
-                <button className="text-sm text-red-600 underline">Delete</button>
+                <button className="text-sm font-medium text-danger">Delete</button>
               </form>
             </div>
             <ServiceForm service={s} />
@@ -33,7 +31,7 @@ export default async function ServicesPage() {
         ))}
       </ul>
 
-      <section className="space-y-2">
+      <section className="card space-y-3 p-5">
         <h2 className="font-semibold">Add a service</h2>
         <ServiceForm />
       </section>

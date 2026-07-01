@@ -51,19 +51,19 @@ export default async function CalendarPage({
   return (
     <div className="max-w-3xl space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Calendar</h1>
+        <h1 className="text-3xl font-semibold">Calendar</h1>
         <div className="flex items-center gap-3 text-sm">
           <Link
             href={`/admin/calendar?date=${day}${isWeek ? "" : "&view=week"}`}
-            className="rounded border px-2 py-0.5"
+            className="btn-ghost px-3 py-1"
           >
             {isWeek ? "Day view" : "Week view"}
           </Link>
-          <Link href={`/admin/calendar${q(addDays(base, -step))}`} className="underline">
+          <Link href={`/admin/calendar${q(addDays(base, -step))}`} className="link-muted">
             ← Prev
           </Link>
           <span className="font-medium">{isWeek ? `Week of ${rangeStart}` : day}</span>
-          <Link href={`/admin/calendar${q(addDays(base, step))}`} className="underline">
+          <Link href={`/admin/calendar${q(addDays(base, step))}`} className="link-muted">
             Next →
           </Link>
         </div>
@@ -76,20 +76,22 @@ export default async function CalendarPage({
           timeZone={ctx.tenant.timezone}
         />
       ) : appts.length === 0 ? (
-        <p className="text-sm text-gray-500">Nothing scheduled.</p>
+        <div className="glass p-10 text-center text-sm text-muted">
+          Nothing scheduled.
+        </div>
       ) : (
         <ul className="space-y-2">
           {appts.map((a) => (
-            <li key={a.id} className="flex items-center gap-3 rounded-lg border p-3">
+            <li key={a.id} className="card flex items-center gap-3 p-4">
               <span
-                className="h-10 w-1 rounded"
+                className="h-10 w-1.5 rounded-full"
                 style={{ backgroundColor: a.staff.color }}
               />
               <div className="flex-1">
                 <p className="font-medium">
                   {fmt(a.start_at)} – {fmt(a.end_at)} · {a.services.name}
                 </p>
-                <p className="text-sm text-gray-500">{a.staff.display_name}</p>
+                <p className="text-sm text-muted">{a.staff.display_name}</p>
               </div>
               <StatusControl id={a.id} status={a.status} />
             </li>
@@ -108,13 +110,13 @@ function StatusControl({ id, status }: { id: string; status: string }) {
   ];
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs uppercase text-gray-400">{status}</span>
+      <span className="badge">{status}</span>
       {status === "booked" &&
         options.map((o) => (
           <form action={setAppointmentStatus} key={o.value}>
             <input type="hidden" name="id" value={id} />
             <input type="hidden" name="status" value={o.value} />
-            <button className="rounded border px-2 py-0.5 text-xs hover:bg-gray-100 dark:hover:bg-gray-800">
+            <button className="rounded-lg border border-border-strong px-2 py-1 text-xs font-medium transition-colors hover:bg-[color-mix(in_oklab,var(--foreground)_6%,transparent)]">
               {o.label}
             </button>
           </form>

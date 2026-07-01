@@ -31,22 +31,22 @@ export default async function ConfirmedPage({
   return (
     <section className="space-y-6 text-center">
       <div
-        className="mx-auto flex h-14 w-14 items-center justify-center rounded-full text-2xl text-white"
+        className="mx-auto flex h-16 w-16 items-center justify-center rounded-full text-3xl text-white shadow-[0_6px_20px_color-mix(in_oklab,var(--brand-accent)_45%,transparent)]"
         style={{ backgroundColor: "var(--brand-accent)" }}
       >
         ✓
       </div>
       <div>
-        <h2 className="text-xl font-semibold">You&apos;re booked!</h2>
-        <p className="mt-2 text-gray-600 dark:text-gray-300">
+        <h2 className="text-2xl font-semibold">You&apos;re booked!</h2>
+        <p className="mt-2 text-muted">
           {data.services.name} — {when}
         </p>
       </div>
-      <div className="flex justify-center gap-4">
-        <Link href={`/book/${slug}`} className="underline">
+      <div className="flex justify-center gap-3">
+        <Link href={`/book/${slug}`} className="btn-ghost">
           Book another
         </Link>
-        <Link href="/my/appointments" className="underline">
+        <Link href="/my/appointments" className="btn-primary">
           My appointments
         </Link>
       </div>

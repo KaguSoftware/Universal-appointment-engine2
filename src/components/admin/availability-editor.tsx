@@ -14,9 +14,9 @@ export function AvailabilityEditor({
   const byDay = new Map(rules.map((r) => [r.weekday, r]));
 
   return (
-    <form action={saveAvailability} className="space-y-2 rounded-lg border p-4">
+    <form action={saveAvailability} className="space-y-2 rounded-xl border border-border bg-[color-mix(in_oklab,var(--surface)_50%,transparent)] p-4">
       <input type="hidden" name="staffId" value={staffId} />
-      <p className="text-sm font-medium">Weekly hours</p>
+      <p className="label-text">Weekly hours</p>
       {DAYS.map((label, weekday) => {
         const rule = byDay.get(weekday);
         return (
@@ -33,21 +33,19 @@ export function AvailabilityEditor({
               type="time"
               name={`start_${weekday}`}
               defaultValue={rule?.start_time.slice(0, 5) ?? "09:00"}
-              className="rounded border px-2 py-1 dark:bg-gray-900"
+              className="field w-auto"
             />
             <span>–</span>
             <input
               type="time"
               name={`end_${weekday}`}
               defaultValue={rule?.end_time.slice(0, 5) ?? "17:00"}
-              className="rounded border px-2 py-1 dark:bg-gray-900"
+              className="field w-auto"
             />
           </div>
         );
       })}
-      <button className="rounded bg-gray-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-white dark:text-gray-900">
-        Save hours
-      </button>
+      <button className="btn-primary">Save hours</button>
     </form>
   );
 }
