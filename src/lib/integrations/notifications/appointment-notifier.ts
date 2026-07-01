@@ -1,4 +1,5 @@
 import "server-only";
+import { appUrl } from "@/lib/app-url";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { Tenant } from "@/lib/types";
 import { NotificationDispatcher } from "./dispatcher";
@@ -6,10 +7,7 @@ import type { NotificationType } from "./types";
 
 /** Absolute URL to the account-less management page for an appointment. */
 function manageUrlFor(slug: string, token: string): string {
-  const base = (
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-  ).replace(/\/$/, "");
-  return `${base}/book/${slug}/manage/${token}`;
+  return `${appUrl()}/book/${slug}/manage/${token}`;
 }
 
 /**

@@ -3,12 +3,9 @@
 import { redirect } from "next/navigation";
 import { IyzicoProvider } from "@/lib/integrations/billing/iyzico-provider";
 import { SubscriptionService } from "@/lib/integrations/billing/subscription-service";
+import { appUrl } from "@/lib/app-url";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { TenantContext } from "@/lib/tenant/tenant-context";
-
-function appUrl(): string {
-  return process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-}
 
 function splitName(full: string): { name: string; surname: string } {
   const parts = full.trim().split(/\s+/);

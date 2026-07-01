@@ -1,14 +1,11 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { appUrl } from "@/lib/app-url";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export interface AuthState {
   error?: string;
-}
-
-function appUrl(): string {
-  return process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 }
 
 export async function signIn(
