@@ -22,6 +22,17 @@ export type AppointmentStatus =
 
 export type OverrideType = "block" | "extra";
 
+export type PaymentStatus =
+  | "none"
+  | "deposit_paid"
+  | "paid"
+  | "refunded"
+  | "failed";
+
+export type DepositType = "none" | "fixed" | "percent";
+
+export type PaymentKind = "deposit" | "full" | "no_show_fee" | "refund";
+
 export interface Tenant {
   id: string;
   slug: string;
@@ -86,6 +97,44 @@ export interface Service {
   price: number;
   currency: string;
   active: boolean;
+  category_id: string | null;
+  image_url: string | null;
+  sort: number;
+  deposit_type: DepositType;
+  deposit_value: number;
+  require_payment: boolean;
+}
+
+export interface ServiceCategory {
+  id: string;
+  tenant_id: string;
+  name: string;
+  sort: number;
+}
+
+export interface Customer {
+  id: string;
+  tenant_id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  notes: string | null;
+  tags: string[];
+  total_no_shows: number;
+  total_spend: number;
+  created_at: string;
+}
+
+export interface Payment {
+  id: string;
+  tenant_id: string;
+  appointment_id: string | null;
+  amount: number;
+  currency: string;
+  kind: PaymentKind;
+  iyzico_ref: string | null;
+  status: string;
+  created_at: string;
 }
 
 export interface AvailabilityRule {
@@ -126,6 +175,12 @@ export interface Appointment {
   status: AppointmentStatus;
   notes: string | null;
   google_event_id: string | null;
+  /** Tenant-scoped CRM customer (distinct from the auth-bound customer_id). */
+  customer_record_id: string | null;
+  price_snapshot: number | null;
+  deposit_amount: number | null;
+  payment_status: PaymentStatus;
+  iyzico_payment_ref: string | null;
   created_at: string;
 }
 
