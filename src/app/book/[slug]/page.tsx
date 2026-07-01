@@ -24,12 +24,12 @@ export default async function ServicePickerPage({
       {services.length === 0 && (
         <p className="text-sm text-muted">No services available yet.</p>
       )}
-      <ul className="space-y-3">
+      <ul className="stagger space-y-3">
         {services.map((s) => (
           <li key={s.id}>
             <Link
               href={`/book/${slug}/${s.id}`}
-              className="flex items-center justify-between rounded-md border border-border p-4 transition-colors hover:bg-subtle"
+              className="card sheen flex items-center justify-between p-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)]"
             >
               <div className="min-w-0 pr-4">
                 <p className="font-medium">{s.name}</p>

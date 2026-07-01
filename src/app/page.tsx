@@ -4,8 +4,10 @@ import { VERTICAL_LIST } from "@/lib/verticals";
 export default function LandingPage() {
   return (
     <main className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center gap-16 px-6 py-24 text-center">
-      <div className="space-y-7">
-        <span className="badge mx-auto">One core · every vertical</span>
+      <div className="stagger space-y-7">
+        <span className="badge mx-auto animate-rise">
+          One core · every vertical
+        </span>
         <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-7xl">
           One booking engine.
           <br />
@@ -26,14 +28,14 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <ul className="grid w-full grid-cols-2 gap-3 sm:grid-cols-5">
+      <ul className="stagger grid w-full grid-cols-2 gap-3 sm:grid-cols-5">
         {VERTICAL_LIST.map((v) => (
           <li
             key={v.id}
-            className="card flex flex-col items-center gap-2 p-5 text-sm font-medium transition-colors hover:bg-subtle"
+            className="card sheen group flex flex-col items-center gap-2 p-5 text-sm font-medium transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-float)]"
           >
             <span
-              className="h-1.5 w-8 rounded-full"
+              className="h-1.5 w-8 rounded-full transition-all duration-300 group-hover:w-12"
               style={{ backgroundColor: v.theme.accent }}
             />
             {v.label}

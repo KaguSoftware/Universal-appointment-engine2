@@ -22,7 +22,7 @@ export function AuthForm({ mode, next }: Props) {
   const isRegister = mode === "register";
 
   return (
-    <div className="glass mx-auto w-full max-w-sm space-y-6 p-8">
+    <div className="glass-float sheen animate-rise mx-auto w-full max-w-sm space-y-6 p-8">
       <div className="space-y-1 text-center">
         <h1 className="text-2xl font-semibold">
           {isRegister ? "Create your account" : "Welcome back"}
@@ -49,7 +49,16 @@ export function AuthForm({ mode, next }: Props) {
         )}
 
         <button type="submit" disabled={pending} className="btn-primary w-full">
-          {pending ? "Please wait…" : isRegister ? "Sign up" : "Sign in"}
+          {pending ? (
+            <>
+              <span className="spinner" />
+              Please wait…
+            </>
+          ) : isRegister ? (
+            "Sign up"
+          ) : (
+            "Sign in"
+          )}
         </button>
       </form>
 

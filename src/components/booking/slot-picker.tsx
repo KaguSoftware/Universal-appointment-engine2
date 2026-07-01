@@ -89,20 +89,24 @@ export function SlotPicker({ tenant, service, staff, isLoggedIn }: Props) {
       <div className="space-y-2">
         <span className="label-text">Available times</span>
         {loading ? (
-          <p className="text-sm text-muted">Loading…</p>
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="skeleton h-[38px]" />
+            ))}
+          </div>
         ) : slots.length === 0 ? (
           <p className="text-sm text-muted">No times available on this day.</p>
         ) : (
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+          <div className="stagger grid grid-cols-3 gap-2 sm:grid-cols-4">
             {slots.map((iso) => (
               <button
                 key={iso}
                 type="button"
                 onClick={() => setSelected(iso)}
-                className={`rounded-md border px-2 py-2 text-sm font-medium transition-colors ${
+                className={`rounded-[0.7rem] border px-2 py-2 text-sm font-semibold transition-all duration-200 active:scale-95 ${
                   selected === iso
-                    ? "border-brand bg-brand text-white"
-                    : "border-border-strong hover:bg-subtle"
+                    ? "border-transparent bg-brand text-white shadow-[var(--shadow-ink)]"
+                    : "border-[var(--glass-border)] bg-[var(--surface)] backdrop-blur hover:-translate-y-0.5 hover:bg-[var(--surface-strong)] hover:shadow-[var(--shadow-glass)]"
                 }`}
               >
                 {formatSlot(iso)}
@@ -172,7 +176,14 @@ export function SlotPicker({ tenant, service, staff, isLoggedIn }: Props) {
             disabled={submitting}
             className="btn-accent w-full"
           >
-            {submitting ? "Booking…" : `Confirm ${formatSlot(selected)}`}
+            {submitting ? (
+              <>
+                <span className="spinner" />
+                Booking…
+              </>
+            ) : (
+              `Confirm ${formatSlot(selected)}`
+            )}
           </button>
         </form>
       )}
