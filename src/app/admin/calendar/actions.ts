@@ -5,6 +5,8 @@ import { BookingService } from "@/lib/booking";
 import { zonedDateTime } from "@/lib/booking/time";
 import { CalendarSyncService } from "@/lib/integrations/google/calendar-sync-service";
 import { AppointmentNotifier } from "@/lib/integrations/notifications/appointment-notifier";
+import { tenantAllows } from "@/lib/feature-gate";
+import { NoShowChargeService } from "@/lib/payments/no-show-charge-service";
 import { AppointmentRepository } from "@/lib/repositories/appointment-repository";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { TenantContext } from "@/lib/tenant/tenant-context";
@@ -24,11 +26,28 @@ export async function setAppointmentStatus(formData: FormData): Promise<void> {
   const ctx = await TenantContext.require();
   const supabase = await createSupabaseServerClient();
   const id = String(formData.get("id"));
+  const repo = new AppointmentRepository(supabase, ctx.tenant.id);
 
   if (status === "cancelled") {
     await new CalendarSyncService().removeForAppointment(id);
   }
-  await new AppointmentRepository(supabase, ctx.tenant.id).setStatus(id, status);
+
+  // No-show: when the tenant has no-show protection, record the forfeited
+  // deposit as a fee and bump the customer's counter (handles status too).
+  if (status === "no_show" && tenantAllows(ctx.tenant, "no_show_protection")) {
+    const service = await repo.serviceForAppointment(id);
+    if (service) {
+      await new NoShowChargeService(supabase).chargeNoShow({
+        appointmentId: id,
+        service,
+      });
+    } else {
+      await repo.setStatus(id, status);
+    }
+  } else {
+    await repo.setStatus(id, status);
+  }
+
   if (status === "cancelled") {
     await new AppointmentNotifier().notify(id, "cancellation");
   }

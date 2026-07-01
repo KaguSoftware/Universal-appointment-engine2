@@ -23,6 +23,32 @@ export function ServiceForm({ service }: { service?: Service }) {
       <NumberField name="price" label="Price" value={service?.price ?? 0} step="0.01" />
       <NumberField name="buffer_before_min" label="Buffer before" value={service?.buffer_before_min ?? 0} />
       <NumberField name="buffer_after_min" label="Buffer after" value={service?.buffer_after_min ?? 0} />
+      <label className="space-y-1.5">
+        <span className="label-text">Deposit type</span>
+        <select
+          name="deposit_type"
+          defaultValue={service?.deposit_type ?? "none"}
+          className="field"
+        >
+          <option value="none">No deposit</option>
+          <option value="fixed">Fixed amount</option>
+          <option value="percent">Percent of price</option>
+        </select>
+      </label>
+      <NumberField
+        name="deposit_value"
+        label="Deposit value"
+        value={service?.deposit_value ?? 0}
+        step="0.01"
+      />
+      <label className="col-span-2 flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          name="require_payment"
+          defaultChecked={service?.require_payment ?? false}
+        />
+        Require full payment at booking
+      </label>
       <label className="col-span-2 flex items-center gap-2 text-sm">
         <input type="checkbox" name="active" defaultChecked={service?.active ?? true} />
         Active (bookable)

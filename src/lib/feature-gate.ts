@@ -6,7 +6,10 @@ export type Feature =
   | "email_reminders"
   | "google_calendar"
   | "custom_branding"
-  | "unlimited_staff";
+  | "unlimited_staff"
+  | "deposits"
+  | "no_show_protection"
+  | "analytics";
 
 const PLAN_FEATURES: Record<PlanId, Feature[]> = {
   free: [],
@@ -16,6 +19,9 @@ const PLAN_FEATURES: Record<PlanId, Feature[]> = {
     "google_calendar",
     "custom_branding",
     "unlimited_staff",
+    "deposits",
+    "no_show_protection",
+    "analytics",
   ],
 };
 

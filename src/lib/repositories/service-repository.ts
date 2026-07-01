@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Service } from "@/lib/types";
+import type { DepositType, Service } from "@/lib/types";
 
 export interface ServiceInput {
   name: string;
@@ -9,6 +9,9 @@ export interface ServiceInput {
   buffer_after_min: number;
   price: number;
   active: boolean;
+  deposit_type?: DepositType;
+  deposit_value?: number;
+  require_payment?: boolean;
 }
 
 /** Tenant-scoped CRUD for services (RLS enforces the tenant boundary). */
