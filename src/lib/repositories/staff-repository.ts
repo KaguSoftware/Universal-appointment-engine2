@@ -1,5 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { AvailabilityRule, Service, Staff } from "@/lib/types";
+import type {
+  AvailabilityOverride,
+  AvailabilityRule,
+  Service,
+  Staff,
+} from "@/lib/types";
 
 export interface StaffInput {
   display_name: string;
@@ -124,5 +129,38 @@ export class StaffRepository {
       );
       if (error) throw error;
     }
+  }
+
+  // --- one-off overrides (time off / extra hours) ---------------------------
+
+  /** Upcoming overrides for a staff member (today onward). */
+  async overrides(staffId: string): Promise<AvailabilityOverride[]> {
+    const today = new Date().toISOString().slice(0, 10);
+    const { data, error } = await this.supabase
+      .from("availability_overrides")
+      .select("*")
+      .eq("staff_id", staffId)
+      .gte("date", today)
+      .order("date");
+    if (error) throw error;
+    return data as AvailabilityOverride[];
+  }
+
+  async addOverride(
+    override: Omit<AvailabilityOverride, "id" | "tenant_id">,
+  ): Promise<void> {
+    const { error } = await this.supabase
+      .from("availability_overrides")
+      .insert({ ...override, tenant_id: this.tenantId });
+    if (error) throw error;
+  }
+
+  async removeOverride(id: string): Promise<void> {
+    const { error } = await this.supabase
+      .from("availability_overrides")
+      .delete()
+      .eq("id", id)
+      .eq("tenant_id", this.tenantId);
+    if (error) throw error;
   }
 }

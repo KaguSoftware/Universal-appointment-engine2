@@ -6,6 +6,7 @@ import {
   updateStaff,
 } from "@/app/admin/staff/actions";
 import { AvailabilityEditor } from "@/components/admin/availability-editor";
+import { OverridesEditor } from "@/components/admin/overrides-editor";
 import { canAddStaff, tenantAllows } from "@/lib/feature-gate";
 import { StaffRepository } from "@/lib/repositories/staff-repository";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -31,6 +32,7 @@ export default async function StaffPage() {
       staff: s,
       assigned: new Set(await repo.serviceIds(s.id)),
       rules: await repo.rules(s.id),
+      overrides: await repo.overrides(s.id),
     })),
   );
 
@@ -38,7 +40,7 @@ export default async function StaffPage() {
     <div className="max-w-2xl space-y-8">
       <h1 className="text-2xl font-bold">Staff</h1>
 
-      {detailed.map(({ staff: s, assigned, rules }) => {
+      {detailed.map(({ staff: s, assigned, rules, overrides }) => {
         return (
           <div key={s.id} className="space-y-3 rounded-lg border p-4">
             <div className="flex items-center justify-between">
@@ -53,6 +55,7 @@ export default async function StaffPage() {
             <ServiceAssignment staff={s} services={services} assigned={assigned} />
             <GoogleConnect staff={s} enabled={googleEnabled} />
             <AvailabilityEditor staffId={s.id} rules={rules} />
+            <OverridesEditor staffId={s.id} overrides={overrides} />
           </div>
         );
       })}

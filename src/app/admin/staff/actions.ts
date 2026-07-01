@@ -60,6 +60,30 @@ export async function disconnectGoogle(formData: FormData): Promise<void> {
   revalidatePath("/admin/staff");
 }
 
+export async function addOverride(formData: FormData): Promise<void> {
+  const { repo } = await ctxRepo();
+  const type = String(formData.get("type")) as "block" | "extra";
+  const date = String(formData.get("date"));
+  const start = String(formData.get("start_time"));
+  const end = String(formData.get("end_time"));
+  if (date && start && end && end > start) {
+    await repo.addOverride({
+      staff_id: String(formData.get("staffId")),
+      date,
+      type,
+      start_time: start,
+      end_time: end,
+    });
+  }
+  revalidatePath("/admin/staff");
+}
+
+export async function removeOverride(formData: FormData): Promise<void> {
+  const { repo } = await ctxRepo();
+  await repo.removeOverride(String(formData.get("id")));
+  revalidatePath("/admin/staff");
+}
+
 export async function saveAvailability(formData: FormData): Promise<void> {
   const { repo } = await ctxRepo();
   const staffId = String(formData.get("staffId"));

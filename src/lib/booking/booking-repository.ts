@@ -50,12 +50,20 @@ export class BookingRepository {
     staffId: string,
     fromISO: string,
     toISO: string,
+    excludeAppointmentId?: string,
   ): Promise<AvailabilityData> {
-    const { data, error } = await this.supabase.rpc("public_availability_data", {
-      p_staff: staffId,
-      p_from: fromISO,
-      p_to: toISO,
-    });
+    const { data, error } = excludeAppointmentId
+      ? await this.supabase.rpc("public_availability_data_excluding", {
+          p_staff: staffId,
+          p_from: fromISO,
+          p_to: toISO,
+          p_exclude: excludeAppointmentId,
+        })
+      : await this.supabase.rpc("public_availability_data", {
+          p_staff: staffId,
+          p_from: fromISO,
+          p_to: toISO,
+        });
     if (error) throw error;
     return data as AvailabilityData;
   }

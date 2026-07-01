@@ -33,8 +33,14 @@ export class BookingService {
     staffId: string,
     dateISO: string,
     timeZone: string,
+    excludeAppointmentId?: string,
   ): Promise<Slot[]> {
-    const data = await this.repo.getAvailabilityData(staffId, dateISO, dateISO);
+    const data = await this.repo.getAvailabilityData(
+      staffId,
+      dateISO,
+      dateISO,
+      excludeAppointmentId,
+    );
 
     const engine = new SlotEngine({
       dateISO,
@@ -72,6 +78,21 @@ export class BookingService {
   async cancel(appointmentId: string): Promise<Appointment> {
     const { data, error } = await this.supabase
       .rpc("cancel_appointment", { p_appointment: appointmentId })
+      .single<Appointment>();
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  /** Move an existing appointment to a new start time via the RPC. */
+  async reschedule(
+    appointmentId: string,
+    startISO: string,
+  ): Promise<Appointment> {
+    const { data, error } = await this.supabase
+      .rpc("reschedule_appointment", {
+        p_appointment: appointmentId,
+        p_start: startISO,
+      })
       .single<Appointment>();
     if (error) throw new Error(error.message);
     return data;

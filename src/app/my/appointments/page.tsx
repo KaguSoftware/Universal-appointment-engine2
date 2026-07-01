@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Appointment, Service, Tenant } from "@/lib/types";
@@ -5,7 +6,7 @@ import { cancelMyAppointment } from "./actions";
 
 type Row = Appointment & {
   services: Pick<Service, "name">;
-  tenants: Pick<Tenant, "name">;
+  tenants: Pick<Tenant, "name" | "slug">;
 };
 
 export default async function MyAppointmentsPage() {
@@ -17,7 +18,7 @@ export default async function MyAppointmentsPage() {
 
   const { data } = await supabase
     .from("appointments")
-    .select("*, services(name), tenants(name)")
+    .select("*, services(name), tenants(name, slug)")
     .eq("customer_id", user.id)
     .order("start_at", { ascending: true })
     .returns<Row[]>();
@@ -54,12 +55,20 @@ export default async function MyAppointmentsPage() {
                 )}
               </div>
               {a.status === "booked" && (
-                <form action={cancelMyAppointment}>
-                  <input type="hidden" name="id" value={a.id} />
-                  <button className="text-sm text-red-600 underline">
-                    Cancel
-                  </button>
-                </form>
+                <div className="flex items-center gap-3">
+                  <Link
+                    href={`/book/${a.tenants.slug}/reschedule/${a.id}`}
+                    className="text-sm underline"
+                  >
+                    Reschedule
+                  </Link>
+                  <form action={cancelMyAppointment}>
+                    <input type="hidden" name="id" value={a.id} />
+                    <button className="text-sm text-red-600 underline">
+                      Cancel
+                    </button>
+                  </form>
+                </div>
               )}
             </li>
           ))}

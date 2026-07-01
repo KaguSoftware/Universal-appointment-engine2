@@ -156,6 +156,47 @@ describe("SlotEngine", () => {
     expect(slots[0].start.toISOString()).toBe("2025-06-16T06:00:00.000Z");
   });
 
+  it("handles Istanbul (UTC+3 year-round, no DST since 2016)", () => {
+    // 2025-03-31 is a Monday (matches baseInput's rule). 09:00 local = 06:00Z.
+    const slots = new SlotEngine(
+      baseInput({ dateISO: "2025-03-31", timeZone: "Europe/Istanbul" }),
+    ).generate();
+    expect(slots[0].start.toISOString()).toBe("2025-03-31T06:00:00.000Z");
+  });
+
+  it("respects US spring-forward DST (New York, clocks skip 02:00-03:00)", () => {
+    // 2025-03-09 is the US DST switch. New York is UTC-5 before, UTC-4 after.
+    // A 09:00 EDT start on that Sunday is 13:00Z (post-switch offset).
+    const slots = new SlotEngine(
+      baseInput({
+        dateISO: "2025-03-09",
+        timeZone: "America/New_York",
+        rules: [rule(0, "09:00", "12:00")], // Sunday
+      }),
+    ).generate();
+    expect(slots[0].start.toISOString()).toBe("2025-03-09T13:00:00.000Z");
+  });
+
+  it("excludes only the appointments passed in (reschedule omits its own)", () => {
+    // Simulates reschedule: the appointment being moved is not in the list,
+    // so its former 10:00 slot is bookable again.
+    const withAppt = new SlotEngine(
+      baseInput({
+        appointments: [
+          appt("2025-06-16T10:00:00.000Z", "2025-06-16T10:30:00.000Z"),
+        ],
+      }),
+    )
+      .generate()
+      .map((s) => s.start.toISOString());
+    const withoutAppt = new SlotEngine(baseInput({ appointments: [] }))
+      .generate()
+      .map((s) => s.start.toISOString());
+
+    expect(withAppt).not.toContain("2025-06-16T10:00:00.000Z");
+    expect(withoutAppt).toContain("2025-06-16T10:00:00.000Z");
+  });
+
   it("does not emit a partial slot that exceeds the window", () => {
     const slots = new SlotEngine(
       baseInput({
