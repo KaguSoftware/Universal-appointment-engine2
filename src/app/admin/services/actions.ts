@@ -20,6 +20,10 @@ function parse(formData: FormData) {
     buffer_after_min: Number(formData.get("buffer_after_min") ?? 0),
     price: Number(formData.get("price") ?? 0),
     active: formData.get("active") === "on",
+    deposit_type: (String(formData.get("deposit_type") ?? "none") ||
+      "none") as "none" | "fixed" | "percent",
+    deposit_value: Number(formData.get("deposit_value") ?? 0),
+    require_payment: formData.get("require_payment") === "on",
   };
 }
 

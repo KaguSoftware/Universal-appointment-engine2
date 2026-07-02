@@ -8,6 +8,8 @@ import { resolveTerminology } from "@/lib/verticals";
 const NAV = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/calendar", label: "Calendar" },
+  { href: "/admin/customers", label: "Customers" },
+  { href: "/admin/insights", label: "Insights" },
   { href: "/admin/services", label: "Services" },
   { href: "/admin/staff", label: "Staff" },
   { href: "/admin/settings", label: "Settings" },

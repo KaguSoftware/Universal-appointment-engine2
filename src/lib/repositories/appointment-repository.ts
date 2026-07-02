@@ -28,6 +28,18 @@ export class AppointmentRepository {
     return data ?? [];
   }
 
+  /** Full service row for the appointment (used for payment/fee math). */
+  async serviceForAppointment(id: string): Promise<Service | null> {
+    const { data, error } = await this.supabase
+      .from("appointments")
+      .select("services(*)")
+      .eq("id", id)
+      .eq("tenant_id", this.tenantId)
+      .maybeSingle<{ services: Service }>();
+    if (error) throw error;
+    return data?.services ?? null;
+  }
+
   async setStatus(
     id: string,
     status: Appointment["status"],
